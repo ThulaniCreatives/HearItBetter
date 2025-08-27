@@ -13,23 +13,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hearitbetter.audioManager.AudioPlayer
+import com.example.hearitbetter.ui.theme.AudioPlayerViewModel
 import com.example.hearitbetter.ui.theme.HearItBetterTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val playAudio by lazy {
-        AudioPlayer(applicationContext)
-    }
-
-    private val audioFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
             HearItBetterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     TestScreen(
-                        name = "Android", modifier = Modifier.padding(innerPadding), playAudio
+                        name = "Android", modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
@@ -47,26 +47,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TestScreen(name: String, modifier: Modifier = Modifier, playAudio: AudioPlayer) {
- val scope = rememberCoroutineScope()
+fun TestScreen(name: String, modifier: Modifier = Modifier) {
+ val audioPlayerViewModel: AudioPlayerViewModel = viewModel()
+    val uiState by audioPlayerViewModel.uiState.collectAsState()
+
+
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("Text Field")
+        Text("${uiState.playingNoise}")
         Button(onClick = {
-            playAudio.playAudio(R.raw.noise_2)
-            scope.launch {
-                delay(5000)
-            }
-            playAudio.playAudio(R.raw.one)
+            audioPlayerViewModel.playNoises()
 
         }) { Text("Play Audio") }
 
         Button(onClick = {
-            playAudio.stopAudio()
+            audioPlayerViewModel.stopPlaying()
 
         }) { Text("Stop Audio") }
 

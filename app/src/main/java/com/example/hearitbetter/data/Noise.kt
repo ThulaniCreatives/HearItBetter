@@ -27,21 +27,31 @@ fun shuffleNoise() {
     return getNoise().shuffle()
 }
 
-fun selectDigits(selectedNoise: Int): Digit?{
+fun selectDigits(selectedNoise: Int): Digit {
     val digitList = mutableListOf<Digit>(
-        Digit(1, R.raw.one)
+        Digit(1, R.raw.digit_1),
+        Digit(2, R.raw.digit_2),
+        Digit(3, R.raw.digit_3),
+        Digit(4, R.raw.digit_4),
+        Digit(5, R.raw.digit_5),
+        Digit(6, R.raw.digit_6),
+        Digit(7, R.raw.digit_7),
+        Digit(8, R.raw.digit_8),
+        Digit(9, R.raw.digit_9)
+
+
     )
 
   val filteredDigits = when (selectedNoise) {
         in 1..5 -> {
-            digitList.find { it.digitId <= 5 }
+            digitList.filter { it.digitId <= 5 }
         }
         else -> {
-            digitList.find { it.digitId > 5 }
+            digitList.filter { it.digitId > 5 }
         }
     }
 
-    return filteredDigits
+    return filteredDigits.random()
 }
 
 
