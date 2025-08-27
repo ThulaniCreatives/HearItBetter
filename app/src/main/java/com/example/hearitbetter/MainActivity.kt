@@ -4,25 +4,41 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.hearitbetter.audioManager.AudioPlayer
 import com.example.hearitbetter.ui.theme.HearItBetterTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.io.File
 
 class MainActivity : ComponentActivity() {
+
+    private val playAudio by lazy {
+        AudioPlayer(applicationContext)
+    }
+
+    private val audioFile: File? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             HearItBetterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    TestScreen(
+                        name = "Android", modifier = Modifier.padding(innerPadding), playAudio
                     )
                 }
             }
@@ -31,17 +47,37 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun TestScreen(name: String, modifier: Modifier = Modifier, playAudio: AudioPlayer) {
+ val scope = rememberCoroutineScope()
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text("Text Field")
+        Button(onClick = {
+            playAudio.playAudio(R.raw.noise_2)
+            scope.launch {
+                delay(5000)
+            }
+            playAudio.playAudio(R.raw.one)
+
+        }) { Text("Play Audio") }
+
+        Button(onClick = {
+            playAudio.stopAudio()
+
+        }) { Text("Stop Audio") }
+
+    }
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     HearItBetterTheme {
-        Greeting("Android")
+        //TestScreen("Android", playAudio = playAudio)
     }
 }
