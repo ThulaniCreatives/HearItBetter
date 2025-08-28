@@ -58,7 +58,9 @@ fun TestScreen(name: String, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("${uiState.playingNoise}")
+        Text("Difficult : ${uiState.playingNoise > 5}")
+        Text("Progress ${uiState.currentAudioCount}/10")
+        Text("Audio is playing:  ${uiState.isPlayingNoise}")
         Button(onClick = {
             audioPlayerViewModel.playNoises()
 

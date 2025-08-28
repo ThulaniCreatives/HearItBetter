@@ -20,4 +20,8 @@ class AudioPlayer(private val context: Context) : IAudioPlayer {
         player?.release()
         player = null
     }
+
+    override fun isPlayingAudio(): Boolean {
+        return player?.isPlaying ?: false
+    }
 }
