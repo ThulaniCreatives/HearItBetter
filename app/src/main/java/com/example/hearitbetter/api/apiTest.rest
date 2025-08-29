@@ -1,0 +1,58 @@
+POST https://enoqczf2j2pbadx.m.pipedream.net
+Content-Type: application/json
+
+{
+    "score": 10,
+    "rounds": [
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        },
+        {
+            "difficulty": 1,
+            "triplet_played": "123",
+            "triplet_answered": "123"
+        }
+    ]
+}

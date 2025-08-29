@@ -1,4 +1,4 @@
-package com.example.hearitbetter.ui.theme
+package com.example.hearitbetter.ui.theme.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,23 +7,33 @@ import com.example.hearitbetter.audioManager.AudioPlayer
 import com.example.hearitbetter.data.NoiseTestUIState
 import com.example.hearitbetter.data.Round
 import com.example.hearitbetter.data.getNoise
+import com.example.hearitbetter.data.payload
 import com.example.hearitbetter.data.selectDigits
+import com.example.hearitbetter.include.TestResultsState
+import com.example.hearitbetter.repository.TestResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 @HiltViewModel
 class AudioPlayerViewModel @Inject constructor(
-    private val audioPlayer: AudioPlayer
+    private val audioPlayer: AudioPlayer, private val repository: TestResultsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NoiseTestUIState())
     val uiState: StateFlow<NoiseTestUIState> = _uiState.asStateFlow()
+
+    private val _testResultsState:MutableStateFlow<TestResultsState<ResponseBody>> = MutableStateFlow(TestResultsState.Loading)
+    val testResultsState:StateFlow<TestResultsState<ResponseBody>> = _testResultsState
+
+
 
     private var usedDigits: MutableSet<Int> = mutableSetOf()
     private var tripletPlayed: String = ""
@@ -37,6 +47,7 @@ class AudioPlayerViewModel @Inject constructor(
     init {
         usedDigits.clear()
         tripletPlayedList.clear()
+        Log.i("response",""+payload)
     }
 
     fun playNoises() {
@@ -90,12 +101,37 @@ class AudioPlayerViewModel @Inject constructor(
 
         Log.i("ViewModel", "$tripletPlayedList")
 
-        if (tripletPlayedList.size == 10) {
+        if (tripletPlayedList.size == 2) {
             Log.i("ViewModel", "Game Over" + tripletPlayedList.size)
             // send data to the internet
+
+            sendTestResults()
+
             clearData()
         }
     }
+
+    fun sendTestResults() {
+        viewModelScope.launch {
+
+            try {
+//                val response = repository.sendTestResults()
+//                Log.i("response", "responseBody$response")
+
+                repository.sendTestResults().collect {
+                    Log.i("response", "$it")
+                }
+
+
+                //_testResultsState.emit(TestResultsState.Success(response))
+            }catch (e: Exception) {
+                //_testResultsState.emit(TestResultsState.Error(e.message))
+                Log.i("response", "api error ${e.message}")
+            }
+
+        }
+    }
+
 
     fun clearData() {
         usedDigits.clear()

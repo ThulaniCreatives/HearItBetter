@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hearitbetter.audioManager.AudioPlayer
-import com.example.hearitbetter.ui.theme.AudioPlayerViewModel
+import com.example.hearitbetter.ui.theme.viewmodel.AudioPlayerViewModel
 import com.example.hearitbetter.ui.theme.HearItBetterTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
