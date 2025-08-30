@@ -21,6 +21,7 @@ android {
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -54,6 +55,9 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.compose.navigation)
     kapt(libs.dagger.kapt)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.logging.interceptor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

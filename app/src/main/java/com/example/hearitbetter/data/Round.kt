@@ -5,3 +5,9 @@ data class Round(
     val triplet_answered: String,
     val triplet_played: String
 )
+data class RoundMapper(
+    val difficulty: Int,
+    val triplet_answered: String,
+    val triplet_played: String,
+    val scored:Int
+)
