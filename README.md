@@ -21,5 +21,5 @@ App features:
 
   ## Screenshots
 
-  <img src="screenshots/screenshots.png"/>
+  ![Image](https://github.com/user-attachments/assets/a088080a-dd71-44f3-a6f0-fd2580521fcb)
 
