@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hearitbetter.MainActivity
 import com.example.hearitbetter.R
-import com.example.hearitbetter.ui.ui.theme.HearItBetterTheme
+import com.example.hearitbetter.ui.theme.HearItBetterTheme
 
 class Dashboard : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class Dashboard : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    Greeting("test", modifier = Modifier, LocalContext.current)
+                    DashboardScreen("test", modifier = Modifier, LocalContext.current)
                 }
             }
         }
@@ -55,7 +55,7 @@ class Dashboard : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier, context: Context) {
+fun DashboardScreen(name: String, modifier: Modifier = Modifier, context: Context) {
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
     Column(
         modifier = Modifier
@@ -120,8 +120,8 @@ fun MainBody(modifier: Modifier = Modifier, mediumPadding: Dp, context: Context)
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun DashboardScreenPreview() {
     HearItBetterTheme {
-        //Greeting("Android", current = LocalContext.current)
+        //DashboardScreen("Android", current = LocalContext.current)
     }
 }

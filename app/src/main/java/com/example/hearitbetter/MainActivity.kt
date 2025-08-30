@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hearitbetter.ui.theme.HearItBetterTheme
-import com.example.hearitbetter.ui.theme.viewmodel.AudioPlayerViewModel
+import com.example.hearitbetter.viewmodel.AudioPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.example.hearitbetter.ui.theme.viewmodel
+package com.example.hearitbetter.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
