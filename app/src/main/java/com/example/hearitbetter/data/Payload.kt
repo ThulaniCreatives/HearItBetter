@@ -18,3 +18,4 @@ val mockedTestResults = mutableListOf(
 )
 
 val payload = Payload(mockedTestResults,10)
+const val MAX_NO_OF_NOISE_PLAY = 3

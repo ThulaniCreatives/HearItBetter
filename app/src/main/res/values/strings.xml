@@ -1,3 +1,15 @@
 <resources>
+    <!--    TestResults Screen-->
     <string name="app_name">HearItBetter</string>
+    <string name="title">Hearing test</string>
+    <string name="instruction">Hearing test</string>
+    <string name="noise_counter">%d/10</string>
+    <string name="enter_triplet_label">Enter number you heared</string>
+    <string name="button_submit">Submit</string>
+    <string name="button_play">Play</string>
+    <string name="dialog_title">Congratulations</string>
+    <string name="dialog_score">You scored %d</string>
+    <string name="button_exit">Exit</string>
+    <string name="button_start">Test again</string>
+    <string name="button_back">Back</string>
 </resources>

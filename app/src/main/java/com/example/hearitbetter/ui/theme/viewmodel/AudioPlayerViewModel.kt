@@ -1,23 +1,26 @@
 package com.example.hearitbetter.ui.theme.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hearitbetter.audioManager.AudioPlayer
+import com.example.hearitbetter.data.MAX_NO_OF_NOISE_PLAY
 import com.example.hearitbetter.data.NoiseTestUIState
 import com.example.hearitbetter.data.Round
 import com.example.hearitbetter.data.getNoise
-import com.example.hearitbetter.data.payload
 import com.example.hearitbetter.data.selectDigits
 import com.example.hearitbetter.include.TestResultsState
 import com.example.hearitbetter.repository.TestResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import javax.inject.Inject
@@ -33,22 +36,21 @@ class AudioPlayerViewModel @Inject constructor(
     private val _testResultsState:MutableStateFlow<TestResultsState<ResponseBody>> = MutableStateFlow(TestResultsState.Loading)
     val testResultsState:StateFlow<TestResultsState<ResponseBody>> = _testResultsState
 
-
-
     private var usedDigits: MutableSet<Int> = mutableSetOf()
     private var tripletPlayed: String = ""
+    private var tripletPlayedUpdated: String = ""
     private var tripletPlayedList: MutableList<String> = mutableListOf()
 
 
-    private val _isPlayingNoise = MutableStateFlow(false)
-    val isPlayingNoise: StateFlow<Boolean> = _isPlayingNoise.asStateFlow()
+    private val _showSnackbar = MutableStateFlow(false)
+    val showSnackbar: StateFlow<Boolean> = _showSnackbar.asStateFlow()
 
+    var userTripletAnswer by mutableStateOf("")
+        private set
 
-    init {
-        usedDigits.clear()
-        tripletPlayedList.clear()
-        Log.i("response",""+payload)
-    }
+    var roundAnswerList = mutableListOf<Round>()
+    var scorePerRound = 0
+    var scoreList = mutableListOf<Int>()
 
     fun playNoises() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -61,11 +63,6 @@ class AudioPlayerViewModel @Inject constructor(
             playDigit()
         }
 
-
-    }
-
-    fun stopPlaying() {
-        audioPlayer.stopAudio()
     }
 
     suspend fun playNoise() {
@@ -73,11 +70,8 @@ class AudioPlayerViewModel @Inject constructor(
         try {
             audioPlayer.playAudio(selectRandomNoiseAndShuffle())
         } catch (e: Exception) {
-            Log.i("Error", "Error playing Noise: ${e.message}")
+            Log.e(TAG, "Error playing Noise: ${e.message}")
         }
-
-        Log.i("Error", "Is playing: ${audioPlayer.isPlayingAudio()}")
-
     }
 
     suspend fun playDigit() {
@@ -86,59 +80,69 @@ class AudioPlayerViewModel @Inject constructor(
 
         audioPlayer.playAudio(selected.digitSource)
         tripletPlayed += selected.digitId
-
-
-
-
         if (tripletPlayed.length == 3) {
             tripletPlayedList.add(tripletPlayed)
+            tripletPlayedUpdated = tripletPlayed
 
-            val isDifficult = if (_uiState.value.playingNoise > 5) 1 else 0
-
-            Round(isDifficult, "123", tripletPlayed)
-            tripletPlayed = ""
-        }
-
-        Log.i("ViewModel", "$tripletPlayedList")
-
-        if (tripletPlayedList.size == 2) {
-            Log.i("ViewModel", "Game Over" + tripletPlayedList.size)
-            // send data to the internet
-
-            sendTestResults()
-
-            clearData()
         }
     }
 
-    fun sendTestResults() {
-        viewModelScope.launch {
+    fun updateTestResultsState(noiseList: MutableList<String>, updatedScore: Int) {
+        if (noiseList.size == MAX_NO_OF_NOISE_PLAY) {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    score = updatedScore, isGameOver = true
+                )
+            }
+            sendTestResults(roundAnswerList)
+        } else {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    score = updatedScore
+                )
+            }
+        }
+    }
 
+    fun sendTestResults(roundAnswerList1: MutableList<Round>) {
+        viewModelScope.launch {
             try {
 //                val response = repository.sendTestResults()
 //                Log.i("response", "responseBody$response")
 
                 repository.sendTestResults().collect {
-                    Log.i("response", "$it")
+                    Log.i(TAG, "$it")
                 }
-
-
                 //_testResultsState.emit(TestResultsState.Success(response))
             }catch (e: Exception) {
                 //_testResultsState.emit(TestResultsState.Error(e.message))
-                Log.i("response", "api error ${e.message}")
+                Log.i(TAG, "api error ${e.message}")
             }
 
         }
     }
 
-
-    fun clearData() {
-        usedDigits.clear()
-        tripletPlayedList.clear()
-        //_uiState.value = MutableStateFlow<>(NoiseTestUIState())clear
+    fun updateTripletAnswer(answer: String) {
+        userTripletAnswer = answer
     }
 
+    fun submitTripletAnswer() {
+        val isDifficult = if (_uiState.value.playingNoise > 5) 1 else 0
+        val testResultPerRound = Round(isDifficult, userTripletAnswer, tripletPlayedUpdated)
+        roundAnswerList.add(testResultPerRound)
+
+        val updateScore = _uiState.value.score.plus(_uiState.value.playingNoise)
+        scorePerRound = if (tripletPlayedUpdated == userTripletAnswer) updateScore else 0
+
+        scoreList.add(scorePerRound)
+        val squareSum = scoreList.sum()
+        updateTestResultsState(tripletPlayedList, squareSum)
+        clearData()
+    }
+
+    fun clearData() {
+        tripletPlayed = ""
+    }
 
     private fun selectRandomNoiseAndShuffle(): Int {
         val selectedNoice = getNoise().random()
@@ -148,7 +152,7 @@ class AudioPlayerViewModel @Inject constructor(
             _uiState.value.score,
             selectedNoice.isDifficult
         )
-        Log.i("ViewModel", "Selected Noise Object$selectedNoice")
+
         if (usedDigits.contains(selectedNoice.noiseId)) {
             // selectRandomNoiseAndShuffle()
         } else {
@@ -157,5 +161,7 @@ class AudioPlayerViewModel @Inject constructor(
         return selectedNoice.noiseSource
     }
 
-
+    companion object {
+        const val TAG = "AudioPlayerViewModel"
+    }
 }
