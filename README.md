@@ -21,4 +21,5 @@ App features:
 
   ## Screenshots
   ![Image](https://github.com/user-attachments/assets/a088080a-dd71-44f3-a6f0-fd2580521fcb)
-
+  
+  ![Image](https://github.com/user-attachments/assets/6806a9c9-b75a-46e6-8a09-59900e4a2f30)
