@@ -12,3 +12,9 @@ App features:
 ## Screenshots
 
 <img src="screenshots/screenshots.png"/>
+
+## App Architecture
+* MVVM
+* Coroutine flow
+* Dagger-hilt dependancy injection
+
