@@ -4,7 +4,7 @@
     <string name="title">Hearing test</string>
     <string name="instruction">Please note the first round start after 3 seconds  then \n the rest delay for 2 seconds</string>
     <string name="noise_counter">%d/10</string>
-    <string name="enter_triplet_label">Enter number you heared</string>
+    <string name="enter_triplet_label">Enter number you heard</string>
     <string name="button_submit">Submit</string>
     <string name="button_play">Play</string>
     <string name="dialog_title">Congratulations</string>
