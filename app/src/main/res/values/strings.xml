@@ -2,7 +2,7 @@
     <!--    TestResults Screen-->
     <string name="app_name">HearItBetter</string>
     <string name="title">Hearing test</string>
-    <string name="instruction">Hearing test</string>
+    <string name="instruction">Please note the first round start after 3 seconds  then \n the rest delay for 2 seconds</string>
     <string name="noise_counter">%d/10</string>
     <string name="enter_triplet_label">Enter number you heared</string>
     <string name="button_submit">Submit</string>
@@ -10,6 +10,11 @@
     <string name="dialog_title">Congratulations</string>
     <string name="dialog_score">You scored %d</string>
     <string name="button_exit">Exit</string>
-    <string name="button_start">Test again</string>
+    <string name="button_start">Start test</string>
     <string name="button_back">Back</string>
+    <!--    Dashboard Screen-->
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="dashboard_instruction"> The hearing test consist of \n 10 sample noise. \n Please use headset for better results.</string>
+    <string name="button_history">View score history</string>
+
 </resources>

@@ -50,16 +50,23 @@ class AudioPlayerViewModel @Inject constructor(
 
     var roundAnswerList = mutableListOf<Round>()
     var scorePerRound = 0
+    var startTestDelay = 3000L // screen takes a delay of 2 seconds to load
+    var startDigitDelay = 2000L
     var scoreList = mutableListOf<Int>()
 
-    fun playNoises() {
+    init {
+        startPlayingNoise(startTestDelay)
+    }
+
+    fun startPlayingNoise(startTestDelay:Long) {
         viewModelScope.launch(Dispatchers.IO) {
+            delay(startTestDelay)
             playNoise()
-            delay(3000)
+            delay(startDigitDelay)
             playDigit()
-            delay(2000)
+            delay(startDigitDelay)
             playDigit()
-            delay(2000)
+            delay(startDigitDelay)
             playDigit()
         }
 
@@ -137,7 +144,15 @@ class AudioPlayerViewModel @Inject constructor(
         scoreList.add(scorePerRound)
         val squareSum = scoreList.sum()
         updateTestResultsState(tripletPlayedList, squareSum)
+
+        if(!uiState.value.isGameOver) {
+            startDigitDelay = 3000L
+            startPlayingNoise(startTestDelay)
+        }
+
+
         clearData()
+        updateTripletAnswer("")
     }
 
     fun clearData() {

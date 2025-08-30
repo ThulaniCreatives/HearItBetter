@@ -1,6 +1,5 @@
 package com.example.hearitbetter
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,7 +26,6 @@ import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,10 +36,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,7 +81,6 @@ fun TestScreen(modifier: Modifier = Modifier,audioPlayerViewModel: AudioPlayerVi
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(stringResource(R.string.title), style = typography.titleLarge)
-        Text("Score ${uiState.score}", style = typography.titleLarge)
 
         TestResultsComponent(
             uiState.currentAudioCount,
@@ -106,16 +101,6 @@ fun TestScreen(modifier: Modifier = Modifier,audioPlayerViewModel: AudioPlayerVi
             verticalArrangement = Arrangement.spacedBy(mediumPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { audioPlayerViewModel.playNoises() }
-            ) {
-                Text(
-                    text = stringResource(R.string.button_play),
-                    fontSize = 16.sp
-                )
-            }
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
