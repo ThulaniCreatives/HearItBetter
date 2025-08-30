@@ -9,12 +9,17 @@ App features:
 * Send test results to the API and show the user realtime perfomance
 
 
-## Screenshots
-
-<img src="screenshots/screenshots.png"/>
-
 ## App Architecture
 * MVVM
 * Coroutine flow
 * Dagger-hilt dependancy injection
+* Clean Architecture
+* Hilt
+* Retrofit
+* OkHttp Interceptor
+* Jetpack compose
+
+  ## Screenshots
+
+  <img src="screenshots/screenshots.png"/>
 
